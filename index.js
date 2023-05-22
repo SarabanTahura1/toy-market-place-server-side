@@ -20,12 +20,26 @@ const client = new MongoClient(uri, {
   },
 });
 
-async function run() {
+const run = async () => {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     client.connect();
+    const beautyMakeupCollection = await client
+      .db("beautyDB")
+      .collection("beauty");
     // Send a ping to confirm a successful connection
+    /* 
+Api Route Start
+*/
+    // get all data from database
+    app.get("/allmakeuptoys", async (req, res) => {
+      const result = await beautyMakeupCollection.find().toArray();
+      res.send(result);
+    });
 
+    /* 
+    
+    */
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
@@ -34,7 +48,7 @@ async function run() {
     // Ensures that the client will close when you finish/error
     console.error(error);
   }
-}
+};
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
