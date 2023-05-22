@@ -63,6 +63,34 @@ Api Route Start
       console.log(result);
       res.send(result);
     });
+
+    // update data by put method
+    app.put("/allmakeuptoys/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = req.body;
+      const updatedMakeup = {
+        $set: {
+          sellerName: updateDoc.sellerName,
+          email: updateDoc.email,
+          photourl: updateDoc.photourl,
+          toyName: updateDoc.toyName,
+          subcategory: updateDoc.subcategory,
+          price: updateDoc.price,
+          quantity: updateDoc.quantity,
+          ratings: updateDoc.ratings,
+          description: updateDoc.description,
+        },
+      };
+      const result = await beautyMakeupCollection.updateOne(
+        query,
+        updatedMakeup,
+        options
+      );
+
+      res.send(result);
+    });
     /* 
     
     */
