@@ -50,6 +50,19 @@ Api Route Start
       const result = await beautyMakeupCollection.insertOne(req.body);
       res.send(result);
     });
+
+    // data fiund by email query
+    app.get("/allmakeuptoysbyemail", async (req, res) => {
+      console.log(req.query?.email);
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query?.email };
+      }
+      const beauty = beautyMakeupCollection.find(query);
+      const result = await beauty.toArray();
+      console.log(result);
+      res.send(result);
+    });
     /* 
     
     */
