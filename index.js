@@ -44,6 +44,12 @@ Api Route Start
       });
       res.send(result);
     });
+
+    // data insert in mongodb
+    app.post("/allmakeuptoys", async (req, res) => {
+      const result = await beautyMakeupCollection.insertOne(req.body);
+      res.send(result);
+    });
     /* 
     
     */
