@@ -115,13 +115,51 @@ Api Route Start
     });
 
     app.get("/toyscategory/:subcatgeory", async (req, res) => {
-      console.log(req.params.subcatgeory);
       const result = await beautyMakeupCollection
         .find({
           subcategory: req.params.subcatgeory,
         })
         .toArray();
       res.send(result);
+    });
+
+    app.get("/allmakeuptoysbyemailsort/:sortText", async (req, res) => {
+      let email = req.query.email;
+      if (req.params.sortText === "ascending") {
+        const result = await beautyMakeupCollection
+          .aggregate([
+            {
+              $match: {
+                email: email, // Replace with your desired email
+              },
+            },
+            { $addFields: { convertedPrice: { $toInt: "$price" } } },
+            { $sort: { convertedPrice: 1 } },
+            { $project: { convertedPrice: 0 } },
+          ])
+          .toArray();
+        res.send(result);
+      } else if (req.params.sortText === "descending") {
+        const result = await beautyMakeupCollection
+          .aggregate([
+            {
+              $match: {
+                email: email, // Replace with your desired email
+              },
+            },
+            { $addFields: { convertedPrice: { $toInt: "$price" } } },
+            { $sort: { convertedPrice: -1 } },
+            { $project: { convertedPrice: 0 } },
+          ])
+          .toArray();
+        res.send(result);
+      } else {
+        const result = await beautyMakeupCollection
+          .find({ email: email })
+          .toArray();
+
+        res.send(result);
+      }
     });
     /* 
     
