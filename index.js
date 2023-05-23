@@ -28,6 +28,12 @@ const run = async () => {
       .db("beautyDB")
       .collection("beauty");
     // Send a ping to confirm a successful connection
+    const indexKeys = { toyName: 1 };
+    const indexOptions = { name: "NameTitle" };
+    const result = await beautyMakeupCollection.createIndex(
+      indexKeys,
+      indexOptions
+    );
     /* 
 Api Route Start
 */
@@ -96,6 +102,15 @@ Api Route Start
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await beautyMakeupCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // iput seach route
+    app.get("/searchByName/:search", async (req, res) => {
+      let searctText = req.params.search;
+      const result = await beautyMakeupCollection
+        .find({ toyName: { $regex: searctText, $options: "i" } })
+        .toArray();
       res.send(result);
     });
     /* 
