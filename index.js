@@ -30,10 +30,10 @@ const run = async () => {
     // Send a ping to confirm a successful connection
     const indexKeys = { toyName: 1 };
     const indexOptions = { name: "NameTitle" };
-    const result = await beautyMakeupCollection.createIndex(
-      indexKeys,
-      indexOptions
-    );
+    // const result = await beautyMakeupCollection.createIndex(
+    //   indexKeys,
+    //   indexOptions
+    // );
     /* 
 Api Route Start
 */
@@ -113,6 +113,16 @@ Api Route Start
         .toArray();
       res.send(result);
     });
+
+    app.get("/toyscategory/:subcatgeory", async (req, res) => {
+      console.log(req.params.subcatgeory);
+      const result = await beautyMakeupCollection
+        .find({
+          subcategory: req.params.subcatgeory,
+        })
+        .toArray();
+      res.send(result);
+    });
     /* 
     
     */
@@ -125,7 +135,7 @@ Api Route Start
     console.error(error);
   }
 };
-run().catch(console.dir);
+run().catch(console.log);
 
 app.get("/", (req, res) => {
   res.send("Beautybelle server is running......");
