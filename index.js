@@ -33,7 +33,7 @@ Api Route Start
 */
     // get all data from database
     app.get("/allmakeuptoys", async (req, res) => {
-      const result = await beautyMakeupCollection.find().toArray();
+      const result = await beautyMakeupCollection.find().limit(20).toArray();
       res.send(result);
     });
 
@@ -53,14 +53,13 @@ Api Route Start
 
     // data fiund by email query
     app.get("/allmakeuptoysbyemail", async (req, res) => {
-      console.log(req.query?.email);
       let query = {};
       if (req.query?.email) {
         query = { email: req.query?.email };
       }
       const beauty = beautyMakeupCollection.find(query);
       const result = await beauty.toArray();
-      console.log(result);
+
       res.send(result);
     });
 
@@ -89,6 +88,14 @@ Api Route Start
         options
       );
 
+      res.send(result);
+    });
+
+    // delete data by id
+    app.delete("/allmakeuptoys/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await beautyMakeupCollection.deleteOne(query);
       res.send(result);
     });
     /* 
